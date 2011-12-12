@@ -1,0 +1,91 @@
+WlanOpenHandle Arguments
+001D71F8   00000002  ... <===who knows, we'll just assume it's a flag and use it.
+001D71FC   00000000  .... <===null sometimes means end of set...but the pointers make me wonder...
+001D7200   001D720C  .r.  <===probably ends here or on the next one.  input usually comes first, return values last.  these are pointers to stack locations which contain no meaningful data
+001D7204   001D7218  r.  <===after setting to FFFFFFFF we notice that it's a memory violation, so it's pertinent.
+001D7208   00000001  ...
+001D720C   001D7324  $s.
+
+Note: when we're not sure, we'll put in nulls or FFFFFFFF to see if it gets accessed.  if we get a memory violation, that tells us something.
+
+Might be arguments to WlanSetProperty 1
+ESP+4    > 00000001  ...  <==== doesn't change could mean we're setting something, a binary flag or whatever
+ESP+8    > 00000003  ...   <==== does change. but in both instances it's really small...like smaller than our text argument length
+ESP+C    > 00000004  ...   <==== does change. but on our second call it looks like it could be a length
+ESP+10   > 001D733C  <s.   <====points to hex 1
+ESP+14   > 001D7334  4s.   <====points to hex all 0's
+ESP+18   > 00000000  ....  
+ESP+1C   > 00421CBC  ¼B.  <==== Probably stops about here...why?  Look at the pointers above.
+ESP+20   > 69E49108  ‘äi  WLANCFG.69E49108
+ESP+24   > 00000030  0...
+ESP+28   > 004264D8  ØdB.  UNICODE "allow"
+ESP+2C   > 00426508  eB.  UNICODE "Testing"
+ESP+30   > 00426540  @eB.  UNICODE "justatest"
+ESP+34   > 00000000  ....
+
+------------------------
+001D7324   00000001  ...
+001D7328   00426540  @eB.  UNICODE "justatest"
+001D732C   00000001  ...
+001D7330   004264D8  ØdB.  UNICODE "allow"
+001D7334   00000000  ....    <==================second pointer
+001D7338   00426508  eB.  UNICODE "Testing"
+001D733C   00000001  ...    <==================first pointer
+001D7340   0000000A  ....
+001D7344   00000000  ....
+
+
+-------------------------------------------------------------
+
+Might be arguments to WlanSetProperty 2
+ESP+4    > 00000001  ...  <==== doesn't change could mean we're setting something, a binary flag or whatever
+ESP+8    > 00000000  ....  <====?  who knows ?
+ESP+C    > 00000028  (...  <==== Could be a length for a string...
+ESP+10   > 0041DA78  xÚA.  <=====String in the dump
+ESP+14   > 001D7334  4s.   <=====points to hex all zeros again, might be a return value that netsh doesn't check directly or a zero flag
+ESP+18   > 00000000  ....  <==== does this get accessed?  it doesn't change either...
+ESP+1C   > 00421CBC  ¼B.   <==== See how below this doesn't change?  Arguments are probably above...
+ESP+20   > 69E49108  ‘äi  WLANCFG.69E49108
+
+------------------------
+
+001D7318   00000001  ...
+001D731C   00000000  ....
+001D7320   00000028  (...
+001D7324   00000001  ...
+001D7328   00426540  @eB.  UNICODE "justatest"
+001D732C   00000001  ...
+001D7330   004264D8  ØdB.  UNICODE "allow"
+001D7334   00000000  ....  <==================pointer
+001D7338   00426508  eB.  UNICODE "Testing"
+001D733C   00000001  ...
+001D7340   0000000A  ....
+001D7344   00000000  ....
+
+
+-------------------------------------------------------------
+
+Call to SetSecondaryKey
+001D7200   00000001  ... <====didn't change even on API change...probably a binary flag
+001D7204   0000000A  .... <====probably the length of our ascii string
+001D7208   001D7378  xs.  ASCII "justatest" <==pointer to an ascii string...
+001D720C   00000001  ... <====? we could try changing some options and see what happens
+001D7210   00000001  ... <====? same as above...
+001D7214   001D7334  4s.  <====Points to that same place where there might have been a return value.
+001D7218   00000000  .... <====Still didn't change.
+001D721C   00421CBC  ¼B.   <==== See how this doesn't change even with a different API call? and I don't see anything remotely meaningful in the dump at that address...
+001D7220   69E49108  ‘äi  WLANCFG.69E49108
+
+
+-------------------------------------------------------------
+
+Call to FreeMemory
+001D7218   0041DA78  xÚA. <===this points near testing
+001D721C   00421CBC  ¼B.  <===this points to garbage...i have no idea
+001D7220   69E49108  ‘äi  WLANCFG.69E49108  <====this STILL DIDNT CHANGE so probably not an argument...the nulls are gone, however -- interesting...maybe we need them...
+
+----------------------
+WlanCloseHandle
+001D74E0   00000001  ... <=== 1 is an argument to close handle...maybe it's a handle count in the previous ones?
+001D74E4   00000000  .... <=== null again...MS seems to leave a lot of nulls at the end of APIs, so let's assume it's required.
+<===== Now that the handle will be closed, the WLANCFG address is gone...interesting.  I wonder what resided there?  Maybe the setup for this call...probably.

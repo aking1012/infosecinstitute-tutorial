@@ -1,0 +1,2 @@
+#define IDR_GROKIT 10
+IDR_GROKIT BINARY MOVEABLE PURE "partc.dll"

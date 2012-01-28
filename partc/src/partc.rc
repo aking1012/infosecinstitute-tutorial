@@ -1,0 +1,2 @@
+#define IDR_GROKIT 130
+IDR_GROKIT RCDATA "partcdll.dll"
